@@ -1,0 +1,9 @@
+[package]
+
+name = "cleese"
+version = "0.0.1"
+authors = ["Andrew Brinker <me@andrewbrinker.com>"]
+
+[dependencies]
+
+time = "~0.0.3"
