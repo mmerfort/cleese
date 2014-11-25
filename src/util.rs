@@ -1,6 +1,15 @@
+// For copyright information, see the LICENSE.md folder at the top of this
+// project's directory structure.
+
+//! # Utilities
+//!
+//! An assortment of useful operations used throughout the project.
+
+#![stable]
+
 use std::{str, io};
 
-// Split a string on whitespace, don't include empty strings
+/// Split a string on whitespace, excluding empty strings.
 pub fn space_split<'a>(s: &'a str) -> Vec<&'a str> {
     s.split(|c: char| -> bool {
         c == ' '
@@ -9,7 +18,7 @@ pub fn space_split<'a>(s: &'a str) -> Vec<&'a str> {
     }).collect()
 }
 
-// Split a string on newlines, don't include empty lines.
+/// Split a string on newlines, don't include empty lines.
 pub fn newline_split<'a>(s: &'a str) -> Vec<&'a str> {
     s.split(|c: char| -> bool {
         c == '\n'
@@ -21,7 +30,7 @@ pub fn newline_split<'a>(s: &'a str) -> Vec<&'a str> {
 }
 
 
-// Run an external command and fetch it's output.
+/// Run an external command and fetch its output.
 pub fn run_external_cmd(cmd: &str, args: &[&str]) -> String {
     let mut process = match io::process::Command::new(cmd).args(args).spawn() {
         Ok(p) => p,
@@ -37,6 +46,8 @@ pub fn run_external_cmd(cmd: &str, args: &[&str]) -> String {
     }
 }
 
+/// Join the strings in xs together, placing between in the middle of each
+/// individual joined string pair.
 pub fn join(xs: &Vec<&str>, between: &str) -> String {
     let mut res = String::new();
     for x in xs.iter() {
@@ -48,6 +59,7 @@ pub fn join(xs: &Vec<&str>, between: &str) -> String {
     return res;
 }
 
+/// Same as join, but working on owned strings instead of slices.
 pub fn join_strings(xs: &Vec<String>, between: &str) -> String {
     let mut res = String::new();
     for x in xs.iter() {
