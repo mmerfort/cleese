@@ -115,8 +115,6 @@ impl <'a> IrcData<'a> {
         // Irc cmd callbacks.
         let c = cmd.name.to_string();
 
-        // FIXME Need to hardcode .cmds for now.
-        // Registered callbacks doesn't have access to IrcData.
         if c.as_slice() == "cmds" {
             let mut cmds: Vec<&str> = self.cmd_cb.keys().map(|x| x.as_slice()).collect();
 

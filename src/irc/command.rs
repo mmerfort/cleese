@@ -1,5 +1,3 @@
-//use core::fmt::{Show, Formatter, Result};
-
 use irc::privmsg::*;
 use util::*;
 
@@ -11,7 +9,6 @@ pub struct IrcCommand<'a> {
     pub channel: &'a str,
 }
 
-// TODO something like this?
 impl<'a> IrcCommand<'a> {
     pub fn new(msg: &'a IrcPrivMsg, key: char) -> Option<IrcCommand<'a>> {
         match Command::new(msg.txt.as_slice(), key) {

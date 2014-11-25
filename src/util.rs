@@ -22,7 +22,6 @@ pub fn newline_split<'a>(s: &'a str) -> Vec<&'a str> {
 
 
 // Run an external command and fetch it's output.
-// TODO maybe should not live here?
 pub fn run_external_cmd(cmd: &str, args: &[&str]) -> String {
     let mut process = match io::process::Command::new(cmd).args(args).spawn() {
         Ok(p) => p,
