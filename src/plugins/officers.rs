@@ -9,6 +9,10 @@
 use std::fmt;
 use irc::{IrcWriter, IrcCommand, BotInfo, Plugin};
 
+/// Officer Position
+///
+/// This is just to allow for type-safe declaration of officer positions, so
+/// that if a position is ever misstyped it's a compile-time error.
 enum Position {
     President,
     VicePresident,
@@ -20,6 +24,7 @@ enum Position {
 }
 
 impl fmt::Show for Position {
+    /// Pretty-print the names of the officer positions.
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Position::President          => write!(f, "President"),
@@ -33,6 +38,10 @@ impl fmt::Show for Position {
     }
 }
 
+/// Degree Programs
+///
+/// This is just to allow for type-safe declaration of degree programs, so
+/// that if a program is ever misstyped it's a compile-time error.
 enum Program {
     CS,
     CE,
@@ -48,6 +57,7 @@ enum Program {
 }
 
 impl fmt::Show for Program {
+    /// Pretty-print the names of the officer positions.
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Program::CS                  => write!(f, "BS in Computer Science"),
@@ -65,6 +75,10 @@ impl fmt::Show for Program {
     }
 }
 
+/// Defines an individual officer.
+///
+/// Nick may not exist, and so is set as Option<&'static str>. There is no
+/// reason for String here as these values are constant.
 struct Officer {
     name: &'static str,
     position: Position,
@@ -73,6 +87,7 @@ struct Officer {
 }
 
 impl fmt::Show for Officer {
+    /// Pretty-print all the officer information.
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let irc_nick = match self.irc_nick {
             Some(x) => x,
@@ -83,11 +98,16 @@ impl fmt::Show for Officer {
     }
 }
 
+/// A struct with nothing more than a vector of officers.
+///
+/// It is not defined as a newtype to be consistent with the expected plugin
+/// design.
 pub struct Officers {
     officers: Vec<Officer>
 }
 
 impl Officers {
+    /// Construct the list of officers.
     pub fn new() -> Officers {
         Officers {
             officers: vec![
@@ -137,12 +157,14 @@ impl Officers {
         }
     }
 
+    /// Print the list of officers
     fn officers(&self) -> String {
         format!("{}", self)
     }
 }
 
 impl fmt::Show for Officers {
+    /// Pretty-print all the officers, each on their own line.
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut result = String::new();
         for officer in self.officers.iter() {
@@ -153,6 +175,10 @@ impl fmt::Show for Officers {
 }
 
 impl Plugin for Officers {
+    /// Respond to received commands.
+    ///
+    /// Called by the plugin subsystem when a command is encountered. It only
+    /// responds to the command "officers". Otherwise it does nothing.
     fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, _info: &BotInfo) {
         match cmd.name {
             "officers" => {
