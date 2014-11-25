@@ -7,6 +7,21 @@
 //! plugins. He exists for use in the CSUSB CSE Club IRC Channel,
 //! and was written by Andrew Brinker based on work done for Rustbot
 //! by [Jonas Hietala](https://github.com/treeman/rustbot).
+//!
+//! Cleese is structured as a fairly simple core controller that passes commands
+//! to a series of plugins which handle them. The cleese core (defined in
+//! `src/irc`) handles parsing of the configuration file and connection to the
+//! IRC server and channel. It then listens for commands prefixed with the
+//! configured prefix and when encountered passes those commands on to the
+//! plugin subsystem.
+//!
+//! Plugins are defined `src/plugins` and registered in `src/plugins/mod.rs`.
+//! When a command is encountered the registered plugins are iterated through,
+//! and each one checks if the commands matches their accepted commands. If it
+//! does, the command is processed by that plugin and does not pass on to the
+//! next. If no command processes the plugin then Cleese continues silently.
+//!
+//! As it stands, Cleese can only connect to a single server at a time.
 
 #![crate_type = "bin"]
 #![crate_name = "cleese"]
