@@ -29,6 +29,7 @@
 //!
 //! As it stands, Cleese can only connect to a single server at a time.
 
+
 #![crate_type = "bin"]
 #![crate_name = "cleese"]
 #![comment = "Your friendly IRC bot"]
@@ -61,6 +62,7 @@ use irc::*;
 mod irc;
 mod util;
 mod plugins;
+
 
 // Default file names to be used later. Defined at the top for simplicity.
 static DEFAULT_CONF_FILE: &'static str = "config.json";
@@ -128,6 +130,7 @@ fn main() {
     };
 }
 
+
 /// Run the IRC bot
 ///
 /// This works by loading in the configuration from the config file,
@@ -148,6 +151,7 @@ fn run(config: IrcConfig) {
     irc.run();
 }
 
+
 /// Print the program help text
 ///
 /// This takes in the program name, command-line options, and program
@@ -166,6 +170,7 @@ fn help(progname: &str, opts: &[OptGroup], descr: &str) {
     println!("Usage: {} [OPTION]", progname);
     io::stdio::println(u.as_slice());
 }
+
 
 /// Print the current version.
 ///

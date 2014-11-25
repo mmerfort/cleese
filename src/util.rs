@@ -3,13 +3,30 @@
 
 //! # Utilities
 //!
-//! An assortment of useful operations used throughout the project.
+//! An assortment of useful operations used throughout the project. These are
+//! basically here because there is no other good place for them, and because
+//! putting them in `src/irc` would be inconvenient for importing in
+//! `src/plugins`.
 
 #![stable]
 
-use std::{str, io};
 
 /// Split a string on whitespace, excluding empty strings.
+///
+/// This makes sure that lifetimes are preserved for the original string slice.
+///
+/// ## Example
+///
+/// ```
+/// let s = space_slit("This is a string");
+/// for item in s.iter() {
+///   println!("{}", item);
+/// }
+/// => This
+/// => is
+/// => a
+/// => string
+/// ```
 pub fn space_split<'a>(s: &'a str) -> Vec<&'a str> {
     s.split(|c: char| -> bool {
         c == ' '
@@ -19,6 +36,21 @@ pub fn space_split<'a>(s: &'a str) -> Vec<&'a str> {
 }
 
 /// Split a string on newlines, don't include empty lines.
+///
+/// This makes sure that lifetimes are preserved for the original string slice.
+///
+/// ## Example
+///
+/// ```
+/// let s = newline_split("This\nis\na\nstring");
+/// for item in s.iter() {
+///   println!("{}", item);
+/// }
+/// => This
+/// => is
+/// => a
+/// => string
+/// ```
 pub fn newline_split<'a>(s: &'a str) -> Vec<&'a str> {
     s.split(|c: char| -> bool {
         c == '\n'
@@ -29,25 +61,19 @@ pub fn newline_split<'a>(s: &'a str) -> Vec<&'a str> {
     }).collect()
 }
 
-
-/// Run an external command and fetch its output.
-pub fn run_external_cmd(cmd: &str, args: &[&str]) -> String {
-    let mut process = match io::process::Command::new(cmd).args(args).spawn() {
-        Ok(p) => p,
-        Err(e) => panic!("Runtime error: {}", e),
-    };
-
-    let output = process.stdout.as_mut().unwrap().read_to_end();
-    match output {
-        Ok(x) => {
-            str::from_utf8(x.as_slice()).unwrap().to_string()
-        },
-        Err(e) => panic!("Read error: {}", e),
-    }
-}
-
 /// Join the strings in xs together, placing between in the middle of each
 /// individual joined string pair.
+///
+/// This is the classic join operation. The only thing to be aware of is that
+/// the final string is an owned string, not a slice.
+///
+/// ## Example
+///
+/// ```
+/// let s = join(&vec!["This", "is", "a", "string"], " ");
+/// println!("{}", item);
+/// => This is a string
+/// ```
 pub fn join(xs: &Vec<&str>, between: &str) -> String {
     let mut res = String::new();
     for x in xs.iter() {
@@ -60,6 +86,19 @@ pub fn join(xs: &Vec<&str>, between: &str) -> String {
 }
 
 /// Same as join, but working on owned strings instead of slices.
+///
+/// This is the classic join operation, and both the original vector and the
+/// final string are composed of owned strings.
+///
+/// ## Example
+///
+/// ```
+/// let first = "Hello ".to_string();
+/// let second = "World!".to_string();
+/// let s = join(&vec![first, second], " ");
+/// println!("{}", item);
+/// => This is a string
+/// ```
 pub fn join_strings(xs: &Vec<String>, between: &str) -> String {
     let mut res = String::new();
     for x in xs.iter() {
