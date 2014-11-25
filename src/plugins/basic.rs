@@ -36,7 +36,8 @@ impl Plugin for Basic {
     }
 }
 
-// 12 days 2 hours 3 minutes 48 seconds
+/// Convert from an integer representation of seconds to a string describing the
+/// associated time in natural language.
 pub fn format_duration(mut sec: i64) -> String {
     let mut min: i64 = sec / 60;
     let mut hours: i64 = min / 60;
@@ -73,18 +74,3 @@ pub fn format_duration(mut sec: i64) -> String {
     };
     util::join_strings(&parts, " ")
 }
-
-#[cfg(test)]
-mod tests {
-    use super::format_duration;
-
-    #[test]
-    fn test_format() {
-        assert_eq!(format_duration(0).as_slice(), "0 seconds");
-        assert_eq!(format_duration(1).as_slice(), "1 second");
-        assert_eq!(format_duration(2).as_slice(), "2 seconds");
-        assert_eq!(format_duration(93).as_slice(), "1 minute 33 seconds");
-        assert_eq!(format_duration(3145400).as_slice(), "36 days 9 hours 43 minutes 20 seconds");
-    }
-}
-
