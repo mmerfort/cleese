@@ -1,19 +1,35 @@
+// For copyright information, see the LICENSE.md folder at the top of this
+// project's directory structure.
+
+//! # Uptime
+//!
+//! A simple plugin for getting the bots uptime. When asked it calculates the
+//! number of seconds since start-up, and converts that into a human-friendly
+//! string to be output to the IRC chat.
+
 extern crate time;
 
 use irc::{IrcWriter, IrcCommand, BotInfo, Plugin};
 use util;
 
+
+/// Contains the starting time, initialized when the plugin is. This may not
+/// actually perfectly coinside with the time since initial connection, but it's
+/// close enough to be usable.
 pub struct Uptime {
     start: time::Tm,
 }
 
 impl Uptime {
+    /// Construct a new Uptime struct with the time set to the current time.
     pub fn new() -> Uptime {
         Uptime {
             start: time::now(),
         }
     }
 
+    /// Get the uptime by subtracting the current time from the starting time
+    /// and converting that into a human-friendly string.
     fn uptime(&self) -> String {
         let at = time::now();
         let dt = at.to_timespec().sec - self.start.to_timespec().sec;
@@ -22,6 +38,10 @@ impl Uptime {
 }
 
 impl Plugin for Uptime {
+    /// Respond to received commands.
+    ///
+    /// Called by the plugin subsystem when a command is encountered. It only
+    /// responds to the command "uptime". Otherwise it does nothing.
     fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, _info: &BotInfo) {
         match cmd.name {
             "uptime" => {

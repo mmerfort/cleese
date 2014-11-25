@@ -1,11 +1,24 @@
+// For copyright information, see the LICENSE.md folder at the top of this
+// project's directory structure.
+
+//! # Excuse
+//!
+//! A fun little plugin that gets a random excuse (shamelessly stolen from
+//! [developerexcuses.com](http://developerexcuses.com/)) and shares it in the
+//! IRC chat.
+
 use std::rand;
 use irc::{IrcWriter, IrcCommand, BotInfo, Plugin};
 
+
+/// Contains a vector of excuses, defined in the constructor.
 pub struct Excuse {
     excuses: Vec<&'static str>
 }
 
 impl Excuse {
+    /// Construct the vector of excuses, currently encoded as string slices
+    /// directly in the source.
     pub fn new() -> Excuse {
         Excuse {
             excuses: vec![
@@ -66,6 +79,7 @@ impl Excuse {
         }
     }
 
+    /// Select a random excuse from the vector of excuses.
     fn excuse(&self) -> String {
         let choice = rand::random::<uint>() % (self.excuses.len() as uint);
         format!("{}", self.excuses[choice])
@@ -73,6 +87,10 @@ impl Excuse {
 }
 
 impl Plugin for Excuse {
+    /// Respond to received commands.
+    ///
+    /// Called by the plugin subsystem when a command is encountered. It only
+    /// responds to the command "excuse". Otherwise it does nothing.
     fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, _info: &BotInfo) {
         match cmd.name {
             "excuse" => {

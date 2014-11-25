@@ -1,3 +1,11 @@
+// For copyright information, see the LICENSE.md folder at the top of this
+// project's directory structure.
+
+//! # Module
+//!
+//! Collects and registers plugins. If a plugin isn't actually registered here,
+//! it won't be included in the response handling.
+
 use irc::{Irc};
 
 pub use plugins::uptime::*;
@@ -10,6 +18,8 @@ mod describe;
 mod excuse;
 mod officers;
 
+
+/// Registers all plugins
 pub fn register(irc: &mut Irc) {
     irc.register_plugin(box Uptime::new());
     irc.register_plugin(box Describe::new());

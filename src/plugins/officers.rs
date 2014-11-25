@@ -1,3 +1,11 @@
+// For copyright information, see the LICENSE.md folder at the top of this
+// project's directory structure.
+
+//! # Officers
+//!
+//! Shares the list of current officers, along with their IRC names and degree
+//! programs.
+
 use std::fmt;
 use irc::{IrcWriter, IrcCommand, BotInfo, Plugin};
 
