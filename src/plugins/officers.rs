@@ -1,4 +1,4 @@
-use std::{fmt};
+use std::fmt;
 use irc::{IrcWriter, IrcCommand, BotInfo, Plugin};
 
 enum Position {

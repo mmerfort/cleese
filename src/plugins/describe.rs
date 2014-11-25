@@ -1,5 +1,3 @@
-extern crate time;
-
 use irc::{IrcWriter, IrcCommand, BotInfo, Plugin};
 
 pub struct Describe;
