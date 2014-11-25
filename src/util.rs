@@ -35,6 +35,7 @@ pub fn space_split<'a>(s: &'a str) -> Vec<&'a str> {
     }).collect()
 }
 
+
 /// Split a string on newlines, don't include empty lines.
 ///
 /// This makes sure that lifetimes are preserved for the original string slice.
@@ -61,6 +62,7 @@ pub fn newline_split<'a>(s: &'a str) -> Vec<&'a str> {
     }).collect()
 }
 
+
 /// Join the strings in xs together, placing between in the middle of each
 /// individual joined string pair.
 ///
@@ -84,6 +86,7 @@ pub fn join(xs: &Vec<&str>, between: &str) -> String {
     }
     return res;
 }
+
 
 /// Same as join, but working on owned strings instead of slices.
 ///
@@ -109,3 +112,4 @@ pub fn join_strings(xs: &Vec<String>, between: &str) -> String {
     }
     return res;
 }
+
