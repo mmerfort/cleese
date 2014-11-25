@@ -1,3 +1,20 @@
+// For copyright information, see the LICENSE.md folder at the top of this
+// project's directory structure.
+
+//! # CLEESE (CLub Environment Experience Supporter and Enhancer)
+//!
+//! Cleese is a friendly IRC bot designed for easy creation and usage of
+//! plugins. He exists for use in the CSUSB CSE Club IRC Channel,
+//! and was written by Andrew Brinker based on work done for Rustbot
+//! by [Jonas Hietala](https://github.com/treeman/rustbot).
+
+#![crate_type = "bin"]
+#![crate_name = "cleese"]
+#![comment = "Your friendly IRC bot"]
+#![license = "MIT"]
+
+#![unstable]
+
 #![allow(dead_code)]
 #![feature(globs)]
 #![feature(macro_rules)]
@@ -13,39 +30,45 @@ extern crate time;
 use std::os;
 use std::io::{mod};
 use regex::Regex;
-use getopts::{optopt, optflag, getopts, usage};
+use getopts::{optopt, optflag, getopts, usage, OptGroup};
 use irc::*;
 
 mod irc;
 mod util;
 mod plugins;
 
-static CMD_PREFIX: char = '.';
-
+/// The entry point for the program. Parses the command line arguments, and then
+/// either prints the help text, prints the version, or starts the IRC bot.
 fn main() {
+    // Get the arguments from the command line.
     let args = os::args();
 
+    // Setup the available options.
     let opts = [
         optopt("c", "config", "Specify config file", "CFILE"),
         optflag("v", "version", "Output version information and exit"),
         optflag("h", "help", "Display this help and exit")
     ];
 
+    // Check options and panic if getting the options fails.
     let matches = match getopts(args.tail(), &opts) {
         Ok(m) => m,
         Err(e) => panic!("{}", e)
     };
 
+    // Set the program name.
     let progname = args[0].clone();
-    let usage = usage("Starts cleese, an IRC bot written in rust.", &opts);
 
+    // If a configuration file name was passed, use it instead of config.json.
     let config = match matches.opt_str("c") {
         Some(c) => c,
         None => "config.json".to_string()
     };
 
+    // Match against flags to either print help text, print version, or run the
+    // IRC bot.
     if matches.opt_present("help") {
-        help(progname.as_slice(), usage.as_slice())
+        help(progname.as_slice(), &opts)
     } else if matches.opt_present("version") {
         version()
     } else {
@@ -53,6 +76,8 @@ fn main() {
     };
 }
 
+/// Run the IRC bot by loading in the configuration from the config file,
+/// connecting to the server, and initializing all registered plugins.
 fn run(config: String) {
     // Read in the configuration file
     let jconf = JsonConfig::new(config);
@@ -88,11 +113,20 @@ fn run(config: String) {
     irc.run();
 }
 
-fn help(progname: &str, usage: &str) {
+/// Print the help text using both the program name and the help info generated
+/// by the usage() function earlier.
+fn help(progname: &str, opts: &[OptGroup]) {
+    // Construct the usage information.
+    let u = usage("Starts cleese, an IRC bot written in rust.", opts);
+
+    // Output the help message.
     println!("Usage: {} [OPTION]", progname);
-    io::stdio::println(usage);
+    io::stdio::println(u.as_slice());
 }
 
+/// Print the current version.
+///
+/// TODO: Make this get the version from Cargo.toml.
 fn version() {
     println!("cleese 0.0.1");
 }
