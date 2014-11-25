@@ -61,6 +61,9 @@ mod irc;
 mod util;
 mod plugins;
 
+static DEFAULT_CONF_FILE: &'static str = "config.json";
+
+
 /// The entry point for the program. Parses the command line arguments, and then
 /// either prints the help text, prints the version, or starts the IRC bot.
 fn main() {
@@ -86,23 +89,9 @@ fn main() {
     // If a configuration file name was passed, use it instead of config.json.
     let config = match matches.opt_str("c") {
         Some(c) => c,
-        None => "config.json".to_string()
+        None => DEFAULT_CONF_FILE.to_string()
     };
 
-    // Match against flags to either print help text, print version, or run the
-    // IRC bot.
-    if matches.opt_present("help") {
-        help(progname.as_slice(), &opts)
-    } else if matches.opt_present("version") {
-        version()
-    } else {
-        run(config)
-    };
-}
-
-/// Run the IRC bot by loading in the configuration from the config file,
-/// connecting to the server, and initializing all registered plugins.
-fn run(config: String) {
     // Read in the configuration file
     let jconf = JsonConfig::new(config);
 
@@ -128,20 +117,30 @@ fn run(config: String) {
         cmd_prefix: jconf.cmd_prefix,
     };
 
-    // Connect to the IRC channel
-    let mut irc = Irc::connect(conf);
+    // Match against flags to either print help text, print version, or run the
+    // IRC bot.
+    if matches.opt_present("help") {
+        help(progname.as_slice(), &opts, conf.descr)
+    } else if matches.opt_present("version") {
+        version()
+    } else {
+        run(conf)
+    };
+}
 
-    // Register some heavier plugins
+/// Run the IRC bot by loading in the configuration from the config file,
+/// connecting to the server, and initializing all registered plugins.
+fn run(config: IrcConfig) {
+    let mut irc = Irc::connect(config);
     plugins::register(&mut irc);
-
     irc.run();
 }
 
 /// Print the help text using both the program name and the help info generated
 /// by the usage() function earlier.
-fn help(progname: &str, opts: &[OptGroup]) {
+fn help<'a>(progname: &str, opts: &[OptGroup], descr: &'a str) {
     // Construct the usage information.
-    let u = usage("Starts cleese, an IRC bot written in rust.", opts);
+    let u = usage(format!("{}", descr).as_slice(), opts);
 
     // Output the help message.
     println!("Usage: {} [OPTION]", progname);
