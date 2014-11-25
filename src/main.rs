@@ -52,7 +52,7 @@ extern crate core;
 extern crate time;
 
 use std::os;
-use std::io::{mod};
+use std::io::{mod, BufferedReader, File};
 use regex::Regex;
 use getopts::{optopt, optflag, getopts, usage, OptGroup};
 use irc::*;
@@ -62,6 +62,7 @@ mod util;
 mod plugins;
 
 static DEFAULT_CONF_FILE: &'static str = "config.json";
+static CARGO_FILE: &'static str = "Cargo.toml";
 
 
 /// The entry point for the program. Parses the command line arguments, and then
@@ -145,9 +146,24 @@ fn help<'a>(progname: &str, opts: &[OptGroup], descr: &'a str) {
 }
 
 /// Print the current version.
-///
-/// TODO: Make this get the version from Cargo.toml.
 fn version() {
-    println!("cleese 0.0.1");
+    let path = Path::new(CARGO_FILE);
+    let file = File::open(&path);
+
+    let mut cargo_file = BufferedReader::new(match file {
+        Ok(x) => x,
+        Err(e) => panic!("{}", e)
+    });
+
+    for line in cargo_file.lines() {
+        let text = match line {
+            Ok(x) => x,
+            Err(e) => panic!("{}", e)
+        };
+        if text.starts_with("version") {
+            let version = text.slice(11, text.len() - 2);
+            println!("{}", version);
+        }
+    }
 }
 
