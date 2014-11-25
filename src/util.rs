@@ -1,4 +1,4 @@
-use std::{ str, io };
+use std::{str, io};
 
 // Split a string on whitespace, don't include empty strings
 pub fn space_split<'a>(s: &'a str) -> Vec<&'a str> {
@@ -58,15 +58,4 @@ pub fn join_strings(xs: &Vec<String>, between: &str) -> String {
         res.push_str(x.as_slice());
     }
     return res;
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_join() {
-        assert_eq!(join(&vec!["a", "b", "c"], ", "),
-            "a, b, c".to_string());
-    }
 }

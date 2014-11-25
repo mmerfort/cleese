@@ -52,27 +52,3 @@ impl<'a> Command<'a> {
         }
     }
 }
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn command() {
-        cmd(".a", "a", vec![]);
-        cmd(".a b c", "a", vec!["b", "c"]);
-        cmd(".foo bar", "foo", vec!["bar"]);
-        cmd("   .foo   bar  ", "foo", vec!["bar"]);
-    }
-
-    fn cmd<'a>(s: &'a str, name: &str, args: Vec<&'a str>) {
-        let key = '.';
-        let cmd = super::Command::new(s, key);
-        match cmd {
-            Some(x) => {
-                assert_eq!(x.name, name);
-                assert_eq!(x.args, args);
-            },
-            None => panic!("No match"),
-        }
-    }
-}
-

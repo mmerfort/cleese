@@ -1,8 +1,6 @@
 #![allow(dead_code)]
 #![feature(globs)]
 #![feature(macro_rules)]
-
-// For regex usage
 #![feature(phase)]
 #[phase(plugin)]
 extern crate regex_macros;
@@ -15,14 +13,7 @@ extern crate time;
 use std::os;
 use std::io::{mod};
 use regex::Regex;
-
-use getopts::{
-    optopt,
-    optflag,
-    getopts,
-    usage
-};
-
+use getopts::{optopt, optflag, getopts, usage};
 use irc::*;
 
 mod irc;
@@ -35,9 +26,9 @@ fn main() {
     let args = os::args();
 
     let opts = [
-        optopt("c", "config", "Specify config file, default: config.json", "CFILE"),
+        optopt("c", "config", "Specify config file", "CFILE"),
         optflag("v", "version", "Output version information and exit"),
-        optflag("h", "help", "display this help and exit")
+        optflag("h", "help", "Display this help and exit")
     ];
 
     let matches = match getopts(args.tail(), &opts) {
@@ -63,14 +54,16 @@ fn main() {
 }
 
 fn run(config: String) {
+    // Read in the configuration file
     let jconf = JsonConfig::new(config);
 
+    // Setup the configuration struct
     let conf = IrcConfig {
-        host: jconf.host.as_slice(),
-        port: jconf.port,
-        nick: jconf.nick.as_slice(),
-        descr: jconf.descr.as_slice(),
-        channels: jconf.channels.iter().map(|x| x.as_slice()).collect(), // Autojoin on connect
+        host:     jconf.host.as_slice(),
+        port:     jconf.port,
+        nick:     jconf.nick.as_slice(),
+        descr:    jconf.descr.as_slice(),
+        channels: jconf.channels.iter().map(|x| x.as_slice()).collect(),
 
         // Input blacklist by code.
         in_blacklist: jconf.in_blacklist.iter().map(|x| x.as_slice()).collect(),
@@ -85,35 +78,9 @@ fn run(config: String) {
             }).collect(),
         cmd_prefix: jconf.cmd_prefix,
     };
+
+    // Connect to the IRC channel
     let mut irc = Irc::connect(conf);
-
-    // A simple way to be friendly.
-    irc.register_privmsg_cb(|msg: &IrcPrivMsg, writer: &IrcWriter, _| {
-        let re = regex!(r"^[Hh]ello[!.]*");
-        if re.is_match(msg.txt.as_slice()) {
-            writer.msg(msg.channel.as_slice(),
-                       format!("Hello {}", msg.sender_nick).as_slice());
-        }
-    });
-
-    // Simple help
-    let help_txt = "I'm a simple irc bot.";
-    irc.register_privmsg_cb(|msg: &IrcPrivMsg, writer: &IrcWriter, _| {
-        let txt = msg.txt.as_slice().trim();
-        if txt == "help" {
-            writer.msg(msg.channel.as_slice(), help_txt);
-        }
-    });
-
-    // Simple things.
-    register_reply!(irc, "about", "To make excuses and argue, that's what I'm good for");
-    register_reply!(irc, "src", "https://github.com/andrewbrinker/cleese");
-    register_reply!(irc, "botsnack", ":)");
-    register_reply!(irc, "status", "Status: 418 I'm a teapot");
-    register_reply!(irc, "help", help_txt);
-
-    // External scripts
-    register_external!(irc, "nextep", "nextep", "--short");
 
     // Register some heavier plugins
     plugins::register(&mut irc);
@@ -126,7 +93,6 @@ fn help(progname: &str, usage: &str) {
     io::stdio::println(usage);
 }
 
-// FIXME Load version from Cargo.toml
 fn version() {
     println!("cleese 0.0.1");
 }

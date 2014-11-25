@@ -6,7 +6,6 @@ pub struct IrcWriter {
     tx: Sender<ConnectionEvent>,
 }
 
-// FIXME take T: ToStr as input instead
 impl IrcWriter {
     // Wrapping a tx channel.
     pub fn new(tx: Sender<ConnectionEvent>) -> IrcWriter {
@@ -38,9 +37,6 @@ impl IrcWriter {
 
     // Use for general output.
     pub fn output(&self, s: String) {
-        // FIXME pastebin http://pastebin.com/api
-        // when we have too many lines.
-        // FIXME throttle
         let lines = newline_split(s.as_slice());
         for line in lines.iter() {
             self.tx.send(ConnectionEvent::Output(line.to_string()));
