@@ -3,13 +3,13 @@ extern crate time;
 use irc::{IrcWriter, IrcCommand, BotInfo, Plugin};
 use util;
 
-pub struct Basic {
+pub struct Uptime {
     start: time::Tm,
 }
 
-impl Basic {
-    pub fn new() -> Basic {
-        Basic {
+impl Uptime {
+    pub fn new() -> Uptime {
+        Uptime {
             start: time::now(),
         }
     }
@@ -21,15 +21,11 @@ impl Basic {
     }
 }
 
-impl Plugin for Basic {
+impl Plugin for Uptime {
     fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, _info: &BotInfo) {
         match cmd.name {
             "uptime" => {
                 writer.msg(cmd.channel.as_slice(), self.uptime().as_slice());
-            },
-            "describe" => {
-                let msg = format!("{}", _info.descr);
-                writer.msg(cmd.channel.as_slice(), msg.as_slice());
             }
             _ => {},
         }

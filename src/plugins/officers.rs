@@ -111,7 +111,7 @@ impl Officers {
                     name: "Ammar Alsibai",
                     position: Position::ActivitiesDirector,
                     program: Program::CE,
-                    irc_nick: None,
+                    irc_nick: Some("Pyrot1c"),
                 },
                 Officer {
                     name: "Anthony Sterrett",
@@ -123,7 +123,7 @@ impl Officers {
                     name: "Mike Korcha",
                     position: Position::Webmaster,
                     program: Program::CSMasters,
-                    irc_nick: None,
+                    irc_nick: Some("korcha"),
                 },
             ]
         }

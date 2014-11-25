@@ -43,7 +43,7 @@ system structure (found in `src/plugins`) works like this:
 
 To add your own plugin, simply add a new file in `src/plugins`, define a struct
 implementing the `Plugin` trait, and register it in `src/plugins/mod.rs`. See
-`src/plugins/basic.rs` for a simple example plugin.
+`src/plugins/describe.rs` for a simple example plugin.
 
 ## Contributing
 
