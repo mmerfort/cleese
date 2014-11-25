@@ -1,12 +1,11 @@
 extern crate time;
 
 use irc::{IrcWriter, IrcCommand, BotInfo, Plugin};
-use util;
 
 pub struct Describe;
 
 impl Describe {
-    pub fn new() -> Describe { Describe; }
+    pub fn new() -> Describe { Describe }
 }
 
 impl Plugin for Describe {
