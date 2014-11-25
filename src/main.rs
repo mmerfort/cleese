@@ -1,12 +1,14 @@
 // For copyright information, see the LICENSE.md folder at the top of this
 // project's directory structure.
 
-//! # CLEESE (CLub Environment Experience Supporter and Enhancer)
+//! # Cleese: The Friendly IRC Bot
 //!
 //! Cleese is a friendly IRC bot designed for easy creation and usage of
 //! plugins. He exists for use in the CSUSB CSE Club IRC Channel,
 //! and was written by Andrew Brinker based on work done for Rustbot
 //! by [Jonas Hietala](https://github.com/treeman/rustbot).
+//!
+//! ## Structure
 //!
 //! Cleese is structured as a fairly simple core controller that passes commands
 //! to a series of plugins which handle them. The cleese core (defined in
@@ -15,11 +17,15 @@
 //! configured prefix and when encountered passes those commands on to the
 //! plugin subsystem.
 //!
+//! ## Plugin System
+//!
 //! Plugins are defined `src/plugins` and registered in `src/plugins/mod.rs`.
 //! When a command is encountered the registered plugins are iterated through,
 //! and each one checks if the commands matches their accepted commands. If it
 //! does, the command is processed by that plugin and does not pass on to the
 //! next. If no command processes the plugin then Cleese continues silently.
+//!
+//! ## Multiple Connections
 //!
 //! As it stands, Cleese can only connect to a single server at a time.
 
