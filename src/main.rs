@@ -147,22 +147,13 @@ fn help<'a>(progname: &str, opts: &[OptGroup], descr: &'a str) {
 
 /// Print the current version.
 fn version() {
-    let path = Path::new(CARGO_FILE);
-    let file = File::open(&path);
-
-    let mut cargo_file = BufferedReader::new(match file {
-        Ok(x) => x,
-        Err(e) => panic!("{}", e)
-    });
+    let file = File::open(&Path::new(CARGO_FILE));
+    let mut cargo_file = BufferedReader::new(file.unwrap());
 
     for line in cargo_file.lines() {
-        let text = match line {
-            Ok(x) => x,
-            Err(e) => panic!("{}", e)
-        };
-        if text.starts_with("version") {
-            let version = text.slice(11, text.len() - 2);
-            println!("{}", version);
+        let line = line.unwrap();
+        if line.starts_with("version") {
+            println!("{}", line.slice(11, line.len() - 2));
         }
     }
 }
