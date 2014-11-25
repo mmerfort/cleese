@@ -12,6 +12,9 @@
 #![crate_name = "cleese"]
 #![comment = "Your friendly IRC bot"]
 #![license = "MIT"]
+#![doc(html_logo_url = "/Users/andrew/Projects/cleese/assets/logo.png",
+       html_favicon_url = "/Users/andrew/Projects/cleese/assets/favicon.ico",
+       html_root_url = "http://github.com/andrewbrinker/cleese")]
 
 #![unstable]
 
