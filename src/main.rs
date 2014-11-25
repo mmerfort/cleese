@@ -148,9 +148,9 @@ fn help<'a>(progname: &str, opts: &[OptGroup], descr: &'a str) {
 /// Print the current version.
 fn version() {
     let file = File::open(&Path::new(CARGO_FILE));
-    let mut file = BufferedReader::new(file.unwrap());
+    let mut reader = BufferedReader::new(file.unwrap());
 
-    for line in file.lines() {
+    for line in reader.lines() {
         let line = line.unwrap();
         if line.starts_with("version") {
             let version = regex!("\".*?\"").find(line.as_slice()).unwrap();
