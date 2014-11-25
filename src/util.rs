@@ -32,14 +32,12 @@ pub fn run_external_cmd(cmd: &str, args: &[&str]) -> String {
     let output = process.stdout.as_mut().unwrap().read_to_end();
     match output {
         Ok(x) => {
-            str::from_utf8(x[]).unwrap().to_string()
+            str::from_utf8(x.as_slice()).unwrap().to_string()
         },
         Err(e) => panic!("Read error: {}", e),
     }
 }
 
-// TODO move this somewhere...
-// FIXME should operate on iterators.
 pub fn join(xs: &Vec<&str>, between: &str) -> String {
     let mut res = String::new();
     for x in xs.iter() {
@@ -57,7 +55,7 @@ pub fn join_strings(xs: &Vec<String>, between: &str) -> String {
         if !res.is_empty() {
             res.push_str(between);
         }
-        res.push_str(x[]);
+        res.push_str(x.as_slice());
     }
     return res;
 }

@@ -19,11 +19,9 @@ pub struct ServerConnection {
 
 impl ServerConnection {
     // Will simply fail if we cannot connect.
-    // FIXME in the future, return error code.
-    // But we need to use multiple servers for that to be useful.
     pub fn new(host: &str, port: u16) -> ServerConnection {
         let addr = format!("{}:{}", host, port);
-        let tcp = match TcpStream::connect(addr[]) {
+        let tcp = match TcpStream::connect(addr.as_slice()) {
             Ok(x) => x,
             Err(e) => { panic!("{}", e); },
         };

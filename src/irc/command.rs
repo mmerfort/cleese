@@ -8,21 +8,18 @@ use util::*;
 pub struct IrcCommand<'a> {
     pub name: &'a str,
     pub args: Vec<&'a str>,
-    //pub msg: &'a IrcPrivMsg,
     pub channel: &'a str,
-    // TODO arg string, everything else a string
 }
 
 // TODO something like this?
 impl<'a> IrcCommand<'a> {
     pub fn new(msg: &'a IrcPrivMsg, key: char) -> Option<IrcCommand<'a>> {
-        match Command::new(msg.txt[], key) {
+        match Command::new(msg.txt.as_slice(), key) {
             Some(cmd) => {
                 Some(IrcCommand {
                     name: cmd.name,
                     args: cmd.args,
-                    //msg: msg,
-                    channel: msg.channel[],
+                    channel: msg.channel.as_slice(),
                 })
             },
             None => None,
@@ -30,10 +27,6 @@ impl<'a> IrcCommand<'a> {
     }
 }
 
-// An actual command.
-// Structured like.
-// .cmd arg1 arg2
-// Can be from irc or whatever.
 #[deriving(Show)]
 pub struct Command<'a> {
     pub name: &'a str,
@@ -41,9 +34,6 @@ pub struct Command<'a> {
 }
 
 impl<'a> Command<'a> {
-    //<char>name arg1 arg2
-    //ex:
-    //.print 1 2
     pub fn new(s: &'a str, key: char) -> Option<Command<'a>> {
         let s = s.trim();
         if s.len() > 0 && s.char_at(0) == key {

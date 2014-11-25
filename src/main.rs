@@ -1,8 +1,6 @@
 #![allow(dead_code)]
 #![feature(globs)]
 #![feature(macro_rules)]
-#![feature(slicing_syntax)]
-#![feature(if_let)]
 
 // For regex usage
 #![feature(phase)]
@@ -57,7 +55,7 @@ fn main() {
     };
 
     if matches.opt_present("help") {
-        help(progname[], usage[])
+        help(progname.as_slice(), usage.as_slice())
     } else if matches.opt_present("version") {
         version()
     } else {
@@ -81,7 +79,7 @@ fn run(config: String) {
         // Output is blacklisted with regexes, as they lack structure.
         out_blacklist: jconf.out_blacklist.iter().map(
             |x| {
-                match Regex::new(x[]) {
+                match Regex::new(x.as_slice()) {
                     Ok(re) => re,
                     Err(err) => panic!("{}", err),
                 }
@@ -101,21 +99,20 @@ fn run(config: String) {
     });
 
     // A simple way to be friendly.
-    // TODO regex -> response macro?
     irc.register_privmsg_cb(|msg: &IrcPrivMsg, writer: &IrcWriter, _| {
         let re = regex!(r"^[Hh]ello[!.]*");
-        if re.is_match(msg.txt[]) {
-            writer.msg(msg.channel[],
-                       format!("Hello {}", msg.sender_nick)[]);
+        if re.is_match(msg.txt.as_slice()) {
+            writer.msg(msg.channel.as_slice(),
+                       format!("Hello {}", msg.sender_nick).as_slice());
         }
     });
 
     // Simple help
     let help_txt = "I'm a simple irc bot.";
     irc.register_privmsg_cb(|msg: &IrcPrivMsg, writer: &IrcWriter, _| {
-        let txt = msg.txt[].trim();
+        let txt = msg.txt.as_slice().trim();
         if txt == "help" {
-            writer.msg(msg.channel[], help_txt);
+            writer.msg(msg.channel.as_slice(), help_txt);
         }
     });
 

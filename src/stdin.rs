@@ -13,9 +13,8 @@ enum StdinControl {
 pub fn reader(writer: IrcWriter) {
     println!("Spawning stdin reader");
     for line in io::stdin().lines() {
-        // FIXME prettier...
-        let s : String = line.unwrap();
-        let x = s[].trim();
+        let s: String = line.unwrap();
+        let x = s.as_slice().trim();
 
         match Command::new(x, CMD_PREFIX) {
             Some(cmd) => {
@@ -45,7 +44,7 @@ fn stdin_cmd(cmd: &Command, writer: &IrcWriter) -> StdinControl {
             if cmd.args.len() > 1 {
                 let chan = cmd.args[0];
                 let rest = cmd.args.slice_from(1).connect(" ");
-                writer.msg(chan, rest[]);
+                writer.msg(chan, rest.as_slice());
             }
             else {
                 // <receiver> can be either a channel or a user nick

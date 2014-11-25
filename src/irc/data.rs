@@ -66,7 +66,7 @@ impl <'a> IrcData<'a> {
 
     /// Actually write something to irc.
     pub fn handle_write(&self, s: &String, stream: &mut LineBufferedWriter<TcpStream>) {
-        let s = s[];
+        let s = s.as_slice();
         let mut blacklisted = false;
         for re in self.out_blacklist.iter() {
             if re.is_match(s) {
@@ -82,7 +82,7 @@ impl <'a> IrcData<'a> {
     /// Called when we receive a response from the server.
     pub fn handle_received(&mut self, line: &String, writer: &IrcWriter) {
         // Trim away newlines and unneeded spaces.
-        let s = line[].trim();
+        let s = line.as_slice().trim();
 
         for cb in self.raw_cb.iter_mut() {
             (*cb)(s, writer, &self.info);
@@ -117,8 +117,8 @@ impl <'a> IrcData<'a> {
 
         // FIXME Need to hardcode .cmds for now.
         // Registered callbacks doesn't have access to IrcData.
-        if c[] == "cmds" {
-            let mut cmds: Vec<&str> = self.cmd_cb.keys().map(|x| x[]).collect();
+        if c.as_slice() == "cmds" {
+            let mut cmds: Vec<&str> = self.cmd_cb.keys().map(|x| x.as_slice()).collect();
 
             // Manually add hardcoded commands.
             cmds.push_all(&["cmds"]);
@@ -133,7 +133,7 @@ impl <'a> IrcData<'a> {
                 response.push_str(*c);
             }
 
-            writer.msg(cmd.channel[], response[]);
+            writer.msg(cmd.channel.as_slice(), response.as_slice());
         } else {
             if self.cmd_cb.contains_key(&c) {
                 let cbs = self.cmd_cb.get_mut(&c).unwrap();
