@@ -27,7 +27,7 @@ impl Plugin for Uptime {
             "uptime" => {
                 writer.msg(cmd.channel.as_slice(), self.uptime().as_slice());
             }
-            _ => {},
+            _ => {}
         }
     }
 }

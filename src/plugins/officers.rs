@@ -150,7 +150,7 @@ impl Plugin for Officers {
             "officers" => {
                 writer.msg(cmd.channel.as_slice(), self.officers().as_slice());
             }
-            _ => {},
+            _ => {}
         }
     }
 }

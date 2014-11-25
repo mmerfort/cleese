@@ -15,7 +15,7 @@ impl Plugin for Describe {
 			    let msg = format!("{}", _info.descr);
 			    writer.msg(cmd.channel.as_slice(), msg.as_slice());
 			}
-            _ => {},
+            _ => {}
         }
     }
 }

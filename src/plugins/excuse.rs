@@ -78,7 +78,7 @@ impl Plugin for Excuse {
             "excuse" => {
                 writer.msg(cmd.channel.as_slice(), self.excuse().as_slice());
             },
-            _ => {},
+            _ => {}
         }
     }
 }
