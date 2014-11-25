@@ -28,7 +28,6 @@ use irc::*;
 mod irc;
 mod util;
 mod plugins;
-mod stdin;
 
 static CMD_PREFIX: char = '.';
 
@@ -87,16 +86,6 @@ fn run(config: String) {
         cmd_prefix: jconf.cmd_prefix,
     };
     let mut irc = Irc::connect(conf);
-
-    // TODO refactor callbacks etc...
-    // The problem lies with stack closures which must live until irc.run()
-    // so they need to be in the same function.
-
-    // Make it so we can read commands from stdin.
-    let writer = irc.writer();
-    spawn(proc() {
-        stdin::reader(writer);
-    });
 
     // A simple way to be friendly.
     irc.register_privmsg_cb(|msg: &IrcPrivMsg, writer: &IrcWriter, _| {

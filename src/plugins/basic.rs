@@ -80,11 +80,11 @@ mod tests {
 
     #[test]
     fn test_format() {
-        assert_eq!(format_duration(0)[], "0 seconds");
-        assert_eq!(format_duration(1)[], "1 second");
-        assert_eq!(format_duration(2)[], "2 seconds");
-        assert_eq!(format_duration(93)[], "1 minute 33 seconds");
-        assert_eq!(format_duration(3145400)[], "36 days 9 hours 43 minutes 20 seconds");
+        assert_eq!(format_duration(0).as_slice(), "0 seconds");
+        assert_eq!(format_duration(1).as_slice(), "1 second");
+        assert_eq!(format_duration(2).as_slice(), "2 seconds");
+        assert_eq!(format_duration(93).as_slice(), "1 minute 33 seconds");
+        assert_eq!(format_duration(3145400).as_slice(), "36 days 9 hours 43 minutes 20 seconds");
     }
 }
 
