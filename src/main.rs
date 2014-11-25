@@ -139,10 +139,7 @@ fn run(config: IrcConfig) {
 /// Print the help text using both the program name and the help info generated
 /// by the usage() function earlier.
 fn help<'a>(progname: &str, opts: &[OptGroup], descr: &'a str) {
-    // Construct the usage information.
     let u = usage(format!("{}", descr).as_slice(), opts);
-
-    // Output the help message.
     println!("Usage: {} [OPTION]", progname);
     io::stdio::println(u.as_slice());
 }
