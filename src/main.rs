@@ -71,37 +71,34 @@ static CARGO_FILE: &'static str = "Cargo.toml";
 ///
 /// The entry point for the program. Parses the command line arguments, and then
 /// either prints the help text, prints the version, or starts the IRC bot.
+///
+/// ## Example
+///
+/// ```
+/// main()
+/// ```
 fn main() {
-    // Get the arguments from the command line.
     let args = os::args();
 
-    // Setup the available options.
     let opts = [
         optopt("c", "config", "Specify config file", "CFILE"),
         optflag("v", "version", "Output version information and exit"),
         optflag("h", "help", "Display this help and exit")
     ];
-
-    // Check options and panic if getting the options fails.
     let matches = match getopts(args.tail(), &opts) {
         Ok(m) => m,
         Err(e) => panic!("{}", e)
     };
 
-    // Set the program name.
     let progname = args[0].clone();
 
-    // If a configuration file name was passed, use it instead of config.json.
-    let config = match matches.opt_str("c") {
+    let config_file = match matches.opt_str("c") {
         Some(c) => c,
         None => DEFAULT_CONF_FILE.to_string()
     };
+    let jconf = JsonConfig::new(config_file);
 
-    // Read in the configuration file
-    let jconf = JsonConfig::new(config);
-
-    // Setup the configuration struct
-    let conf = IrcConfig {
+    let config = IrcConfig {
         host:     jconf.host.as_slice(),
         port:     jconf.port,
         nick:     jconf.nick.as_slice(),
@@ -122,14 +119,12 @@ fn main() {
         cmd_prefix: jconf.cmd_prefix,
     };
 
-    // Match against flags to either print help text, print version, or run the
-    // IRC bot.
     if matches.opt_present("help") {
-        help(progname.as_slice(), &opts, conf.descr)
+        help(progname.as_slice(), &opts, config.descr)
     } else if matches.opt_present("version") {
         version()
     } else {
-        run(conf)
+        run(config)
     };
 }
 
@@ -137,6 +132,16 @@ fn main() {
 ///
 /// This works by loading in the configuration from the config file,
 /// connecting to the server, and initializing all registered plugins.
+///
+/// ## Example
+///
+/// ```
+/// let config = IrcConfig {
+///     // ...
+/// }
+///
+/// run(config);
+/// ```
 fn run(config: IrcConfig) {
     let mut irc = Irc::connect(config);
     plugins::register(&mut irc);
@@ -150,7 +155,13 @@ fn run(config: IrcConfig) {
 /// description is loaded from config.json (or the alternative config file if
 /// you've defined one), so make sure your config file actually defines a
 /// description.
-fn help<'a>(progname: &str, opts: &[OptGroup], descr: &'a str) {
+///
+/// ## Example
+///
+/// ```
+/// help("cleese", &opts, "Your friendly neighborhood IRC bot");
+/// ```
+fn help(progname: &str, opts: &[OptGroup], descr: &str) {
     let u = usage(format!("{}", descr).as_slice(), opts);
     println!("Usage: {} [OPTION]", progname);
     io::stdio::println(u.as_slice());
@@ -162,6 +173,12 @@ fn help<'a>(progname: &str, opts: &[OptGroup], descr: &'a str) {
 /// find the file it will error out. Make sure you actually have a Cargo.toml
 /// file (which you should), and that the Cargo.toml file always have an
 /// up-to-date version.
+///
+/// ## Example
+///
+/// ```
+/// version()
+/// ```
 fn version() {
     let file = File::open(&Path::new(CARGO_FILE));
     let mut reader = BufferedReader::new(file.unwrap());
