@@ -44,6 +44,7 @@
 #![feature(macro_rules)]
 #![feature(phase)]
 #[phase(plugin)]
+
 extern crate regex_macros;
 extern crate regex;
 extern crate serialize;
@@ -61,10 +62,13 @@ mod irc;
 mod util;
 mod plugins;
 
+// Default file names to be used later. Defined at the top for simplicity.
 static DEFAULT_CONF_FILE: &'static str = "config.json";
 static CARGO_FILE: &'static str = "Cargo.toml";
 
 
+/// Parse and respond to the CLI args
+///
 /// The entry point for the program. Parses the command line arguments, and then
 /// either prints the help text, prints the version, or starts the IRC bot.
 fn main() {
@@ -129,7 +133,9 @@ fn main() {
     };
 }
 
-/// Run the IRC bot by loading in the configuration from the config file,
+/// Run the IRC bot
+///
+/// This works by loading in the configuration from the config file,
 /// connecting to the server, and initializing all registered plugins.
 fn run(config: IrcConfig) {
     let mut irc = Irc::connect(config);
@@ -137,8 +143,13 @@ fn run(config: IrcConfig) {
     irc.run();
 }
 
-/// Print the help text using both the program name and the help info generated
-/// by the usage() function earlier.
+/// Print the program help text
+///
+/// This takes in the program name, command-line options, and program
+/// description, and uses them to print a nice complete help text. The
+/// description is loaded from config.json (or the alternative config file if
+/// you've defined one), so make sure your config file actually defines a
+/// description.
 fn help<'a>(progname: &str, opts: &[OptGroup], descr: &'a str) {
     let u = usage(format!("{}", descr).as_slice(), opts);
     println!("Usage: {} [OPTION]", progname);
@@ -146,6 +157,11 @@ fn help<'a>(progname: &str, opts: &[OptGroup], descr: &'a str) {
 }
 
 /// Print the current version.
+///
+/// This works by grabbing the version from the Cargo.toml file. If it can't
+/// find the file it will error out. Make sure you actually have a Cargo.toml
+/// file (which you should), and that the Cargo.toml file always have an
+/// up-to-date version.
 fn version() {
     let file = File::open(&Path::new(CARGO_FILE));
     let mut reader = BufferedReader::new(file.unwrap());
