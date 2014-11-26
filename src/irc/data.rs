@@ -1,3 +1,6 @@
+// For copyright information, see the LICENSE.md folder at the top of this
+// project's directory structure.
+
 use std::io::*;
 use regex::*;
 use std::collections::HashSet;

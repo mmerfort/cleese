@@ -1,3 +1,6 @@
+// For copyright information, see the LICENSE.md folder at the top of this
+// project's directory structure.
+
 #![macro_escape]
 
 // We can reexport what we want to show from this module.

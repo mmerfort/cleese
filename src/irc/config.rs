@@ -1,3 +1,6 @@
+// For copyright information, see the LICENSE.md folder at the top of this
+// project's directory structure.
+
 use regex::Regex;
 use serialize::{json, Decodable};
 use std::io::{File, Open, Read};

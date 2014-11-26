@@ -1,3 +1,6 @@
+// For copyright information, see the LICENSE.md folder at the top of this
+// project's directory structure.
+
 use core::fmt::{Show, Formatter, Result};
 
 // A regular irc message sent from the server.
