@@ -18,6 +18,8 @@ use util;
 /// close enough to be usable.
 pub struct Uptime {
     start: time::Tm,
+    description: &'static str,
+    name: &'static str
 }
 
 impl Uptime {
@@ -25,6 +27,8 @@ impl Uptime {
     pub fn new() -> Uptime {
         Uptime {
             start: time::now(),
+            description: "Find out how long the bot has been alive.",
+            name: "Uptime"
         }
     }
 
@@ -50,6 +54,9 @@ impl Plugin for Uptime {
             _ => {}
         }
     }
+
+    fn help(&self) -> &'static str { self.description }
+    fn name(&self) -> &'static str { self.name }
 }
 
 /// Convert from an integer representation of seconds to a string describing the

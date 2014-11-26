@@ -103,7 +103,9 @@ impl fmt::Show for Officer {
 /// It is not defined as a newtype to be consistent with the expected plugin
 /// design.
 pub struct Officers {
-    officers: Vec<Officer>
+    officers: Vec<Officer>,
+    description: &'static str,
+    name: &'static str
 }
 
 impl Officers {
@@ -153,7 +155,9 @@ impl Officers {
                     program: Program::CSMasters,
                     irc_nick: Some("korcha"),
                 },
-            ]
+            ],
+            description: "Get the list of CSE Club officers",
+            name: "Officers"
         }
     }
 
@@ -187,4 +191,7 @@ impl Plugin for Officers {
             _ => {}
         }
     }
+
+    fn help(&self) -> &'static str { self.description }
+    fn name(&self) -> &'static str { self.name }
 }

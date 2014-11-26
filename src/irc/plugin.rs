@@ -13,5 +13,8 @@ pub trait Plugin {
                _cmd:    &IrcCommand,
                _writer: &IrcWriter,
                _info:   &BotInfo) {}
+
+       fn help(&self) -> &'static str;
+       fn name(&self) -> &'static str;
 }
 

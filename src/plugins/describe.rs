@@ -8,13 +8,21 @@
 use irc::{IrcWriter, IrcCommand, BotInfo, Plugin};
 
 
-/// A unit struct, defined here only to be consistent with the Plugin interface.
-pub struct Describe;
+/// This struct only has the minimum number of fields for a plugin.
+pub struct Describe {
+    description: &'static str,
+    name: &'static str
+}
 
 
 impl Describe {
     /// Just returns an instance of the unit struct.
-    pub fn new() -> Describe { Describe }
+    pub fn new() -> Describe {
+        Describe {
+            description: "Describe the IRC bot",
+            name: "Describe"
+        }
+    }
 }
 
 impl Plugin for Describe {
@@ -31,5 +39,8 @@ impl Plugin for Describe {
             _ => {}
         }
     }
+
+    fn help(&self) -> &'static str { self.description }
+    fn name(&self) -> &'static str { self.name }
 }
 

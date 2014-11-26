@@ -13,7 +13,9 @@ use irc::{IrcWriter, IrcCommand, BotInfo, Plugin};
 
 /// Contains a vector of excuses, defined in the constructor.
 pub struct Excuse {
-    excuses: Vec<&'static str>
+    excuses: Vec<&'static str>,
+    description: &'static str,
+    name: &'static str
 }
 
 impl Excuse {
@@ -75,7 +77,9 @@ impl Excuse {
                 "I thought I finished that.",
                 "I must have been stress testing our production server.",
                 "The request must have dropped some packets."
-            ]
+            ],
+            description: "Get a random excuse taken from developerexcuses.com",
+            name: "Excuse"
         }
     }
 
@@ -99,6 +103,9 @@ impl Plugin for Excuse {
             _ => {}
         }
     }
+
+    fn help(&self) -> &'static str { self.description }
+    fn name(&self) -> &'static str { self.name }
 }
 
 
