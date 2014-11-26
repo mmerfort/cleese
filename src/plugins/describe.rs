@@ -38,10 +38,10 @@ impl Plugin for Describe {
     /// responds to the command "describe". Otherwise it does nothing.
     fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, info: &BotInfo) {
         match cmd.name {
-			"describe" => {
-			    let msg = format!("{}", info.descr);
-			    writer.msg(cmd.channel.as_slice(), msg.as_slice());
-			}
+            "describe" => {
+                let msg = format!("{}", info.descr);
+                writer.msg(cmd.channel.as_slice(), msg.as_slice());
+            }
             _ => {}
         }
     }
