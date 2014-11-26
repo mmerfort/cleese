@@ -45,32 +45,32 @@ impl fmt::Show for Position {
 enum Program {
     CS,
     CE,
-    Interdisciplinary,
-    WebProgramming,
-    SystemAdministrator,
-    GameDevelopment,
-    GraphicsProgramming,
-    Bioinformatics,
+    Inter,
+    Web,
+    SysAdmin,
+    GameDev,
+    Graphics,
+    Bioinfo,
     CSMasters,
     CSMinor,
-    CSCertificate
+    CSCert
 }
 
 impl fmt::Show for Program {
     /// Pretty-print the names of the officer positions.
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Program::CS                  => write!(f, "BS in Computer Science"),
-            Program::CE                  => write!(f, "BS in Computer Engineering"),
-            Program::Interdisciplinary   => write!(f, "BA in Computer Systems, Interdisciplinary Option"),
-            Program::WebProgramming      => write!(f, "BA in Computer Systems, Web Programming Option"),
-            Program::SystemAdministrator => write!(f, "BA in Computer Systems, System Administrator Option"),
-            Program::GameDevelopment     => write!(f, "BA in Computer Systems, Game Development Option"),
-            Program::GraphicsProgramming => write!(f, "BA in Computer Systems, Graphics Programming Option"),
-            Program::Bioinformatics      => write!(f, "BS in Bioinformatics"),
-            Program::CSMasters           => write!(f, "Masters in Computer Science"),
-            Program::CSMinor             => write!(f, "Minor in Computer Science"),
-            Program::CSCertificate       => write!(f, "Certificate in Computer Science"),
+            Program::CS        => write!(f, "Computer Science"),
+            Program::CE        => write!(f, "Computer Engineering"),
+            Program::Inter     => write!(f, "Computer Systems - Inter"),
+            Program::Web       => write!(f, "Computer Systems - Web"),
+            Program::SysAdmin  => write!(f, "Computer Systems - Sys Admin"),
+            Program::GameDev   => write!(f, "Computer Systems - Game Dev"),
+            Program::Graphics  => write!(f, "Computer Systems - Graphics"),
+            Program::Bioinfo   => write!(f, "Bioinformatics"),
+            Program::CSMasters => write!(f, "Computer Science Masters"),
+            Program::CSMinor   => write!(f, "Computer Science Minor"),
+            Program::CSCert    => write!(f, "Computer Science Certificate")
         }
     }
 }
