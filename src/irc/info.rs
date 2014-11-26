@@ -9,7 +9,7 @@ pub struct BotInfo<'a> {
     pub nick: &'a str,
     pub descr: &'a str,
     pub channels: Vec<&'a str>,
-    pub cmd_prefix: char,
+    pub cmd_prefix: &'a str,
 }
 
 impl<'a> BotInfo<'a> {

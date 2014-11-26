@@ -14,7 +14,7 @@ pub struct IrcConfig<'a> {
     pub channels: Vec<&'a str>,
     pub in_blacklist: Vec<&'a str>,
     pub out_blacklist: Vec<Regex>,
-    pub cmd_prefix: char,
+    pub cmd_prefix: &'a str,
 }
 
 #[deriving(Decodable)]
@@ -26,7 +26,7 @@ pub struct JsonConfig {
     pub channels: Vec<String>,
     pub in_blacklist: Vec<String>,
     pub out_blacklist: Vec<String>,
-    pub cmd_prefix: char
+    pub cmd_prefix: String
 }
 
 impl JsonConfig {

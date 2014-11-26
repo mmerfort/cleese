@@ -14,5 +14,5 @@
         "PING"
     ],
     "out_blacklist": ["^PONG"],
-    "cmd_prefix": "~"
+    "cmd_prefix": "cleese "
 }

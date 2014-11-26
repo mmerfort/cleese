@@ -118,7 +118,7 @@ fn main() {
                     Err(err) => panic!("{}", err),
                 }
             }).collect(),
-        cmd_prefix: jconf.cmd_prefix,
+        cmd_prefix: jconf.cmd_prefix.as_slice(),
     };
 
     if matches.opt_present("help") {

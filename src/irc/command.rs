@@ -13,7 +13,7 @@ pub struct IrcCommand<'a> {
 }
 
 impl<'a> IrcCommand<'a> {
-    pub fn new(msg: &'a IrcPrivMsg, key: char) -> Option<IrcCommand<'a>> {
+    pub fn new(msg: &'a IrcPrivMsg, key: &'a str) -> Option<IrcCommand<'a>> {
         match Command::new(msg.txt.as_slice(), key) {
             Some(cmd) => {
                 Some(IrcCommand {
@@ -34,13 +34,13 @@ pub struct Command<'a> {
 }
 
 impl<'a> Command<'a> {
-    pub fn new(s: &'a str, key: char) -> Option<Command<'a>> {
+    pub fn new(s: &'a str, key: &'a str) -> Option<Command<'a>> {
         let s = s.trim();
-        if s.len() > 0 && s.char_at(0) == key {
+        if s.len() > 0 && s.starts_with(key) {
             let split = space_split(s);
-            let name = split[0].slice_from(1);
+            let name = split[1];
             let mut args = Vec::new();
-            args.push_all(split.slice_from(1));
+            args.push_all(split.slice_from(2));
 
             Some(Command {
                 name: name,
