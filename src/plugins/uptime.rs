@@ -9,7 +9,7 @@
 
 extern crate time;
 
-use irc::{IrcWriter, IrcCommand, BotInfo, Plugin};
+use irc::{IrcPrivMsg, IrcWriter, IrcCommand, BotInfo, Plugin};
 use util;
 
 
@@ -42,6 +42,12 @@ impl Uptime {
 }
 
 impl Plugin for Uptime {
+    /// Respond to private messages.
+    ///
+    /// Called by the plugin subsystem when a private message is received. It
+    /// currently does nothing.
+    fn privmsg(&mut self, _: &IrcPrivMsg, _: &IrcWriter, _: &BotInfo) {}
+
     /// Respond to received commands.
     ///
     /// Called by the plugin subsystem when a command is encountered. It only
@@ -55,7 +61,10 @@ impl Plugin for Uptime {
         }
     }
 
+    /// Return the plugin description.
     fn help(&self) -> &'static str { self.description }
+
+    /// Return the plugin name.
     fn name(&self) -> &'static str { self.name }
 }
 

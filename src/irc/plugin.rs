@@ -4,17 +4,9 @@
 use irc::{IrcWriter, IrcCommand, BotInfo, IrcPrivMsg};
 
 pub trait Plugin {
-    fn privmsg(&mut self,
-               _msg:    &IrcPrivMsg,
-               _writer: &IrcWriter,
-               _info:   &BotInfo) {}
-
-        fn cmd(&mut self,
-               _cmd:    &IrcCommand,
-               _writer: &IrcWriter,
-               _info:   &BotInfo) {}
-
-       fn help(&self) -> &'static str;
-       fn name(&self) -> &'static str;
+    fn privmsg(&mut self, msg: &IrcPrivMsg, writer: &IrcWriter, info: &BotInfo);
+    fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, info: &BotInfo);
+    fn help(&self) -> &'static str;
+    fn name(&self) -> &'static str;
 }
 
