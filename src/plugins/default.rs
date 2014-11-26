@@ -10,23 +10,23 @@ use irc::{IrcPrivMsg, IrcWriter, IrcCommand, BotInfo, Plugin};
 
 
 /// This struct only has the minimum number of fields for a plugin.
-pub struct Describe {
+pub struct Default {
     description: &'static str,
     name: &'static str
 }
 
 
-impl Describe {
+impl Default {
     /// Just returns an instance of the unit struct.
-    pub fn new() -> Describe {
-        Describe {
+    pub fn new() -> Default {
+        Default {
             description: "Get information on accessing the help docs",
             name: "Default"
         }
     }
 }
 
-impl Plugin for Describe {
+impl Plugin for Default {
     /// Respond to private messages.
     ///
     /// Called by the plugin subsystem when a private message is received. It
@@ -37,7 +37,7 @@ impl Plugin for Describe {
     ///
     /// Called by the plugin subsystem when a command is encountered. It only
     /// responds to the command "describe". Otherwise it does nothing.
-    fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, info: &BotInfo) {
+    fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, _: &BotInfo) {
         let msg = "Type `/msg cleese help` to see my list of commands.";
         writer.msg(cmd.channel.as_slice(), msg);
     }

@@ -15,6 +15,7 @@ use irc::info::BotInfo;
 use irc::command::*;
 
 use irc::plugin::*;
+use util::join;
 
 pub struct IrcData<'a> {
     // General config.
@@ -128,14 +129,7 @@ impl <'a> IrcData<'a> {
             cmds.push_all(&["cmds"]);
             cmds.sort();
 
-            // Should be a join somewhere here right?
-            let mut response = "".to_string();
-            for c in cmds.iter() {
-                if !response.is_empty() {
-                    response.push_str(", ");
-                }
-                response.push_str(*c);
-            }
+            let response = join(&cmds, ", ");
 
             writer.msg(cmd.channel.as_slice(), response.as_slice());
         } else {
