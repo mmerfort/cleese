@@ -98,10 +98,10 @@ impl <'a> IrcData<'a> {
                 // Print inside here so we can skip certain codes.
                 self.handle_msg(&msg, writer);
             },
-            _ => {
+            None => {
                 // Couldn't capture message, print it here.
                 println!("<! {}", s);
-            },
+            }
         }
     }
 
@@ -120,28 +120,24 @@ impl <'a> IrcData<'a> {
         // Irc cmd callbacks.
         let c = cmd.name.to_string();
 
+        // Return the list of command callbacks if requested.
         if c.as_slice() == "cmds" {
-            let mut cmds: Vec<&str> = self.cmd_cb.keys().map(|x| {
+            let cmds: Vec<&str> = self.cmd_cb.keys().map(|x| {
                 x.as_slice()
             }).collect();
 
-            // Manually add hardcoded commands.
-            cmds.push_all(&["cmds"]);
-            cmds.sort();
-
             let response = join(&cmds, ", ");
-
             writer.msg(cmd.channel.as_slice(), response.as_slice());
-        } else {
-            if self.cmd_cb.contains_key(&c) {
-                let cbs = self.cmd_cb.get_mut(&c).unwrap();
-                for cb in cbs.iter_mut() {
-                    (*cb)(cmd, writer, &self.info);
-                }
+        }
+
+        if self.cmd_cb.contains_key(&c) {
+            let cbs = self.cmd_cb.get_mut(&c).unwrap();
+            for cb in cbs.iter_mut() {
+                (*cb)(cmd, writer, &self.info);
             }
-            for plugin in self.plugins.iter_mut() {
-                plugin.cmd(cmd, writer, &self.info);
-            }
+        }
+        for plugin in self.plugins.iter_mut() {
+            plugin.cmd(cmd, writer, &self.info);
         }
     }
 
@@ -169,10 +165,10 @@ impl <'a> IrcData<'a> {
 
                 match IrcCommand::new(&msg, self.info.cmd_prefix) {
                     Some(cmd) => self.handle_cmd(&cmd, writer),
-                    _ => (),
+                    None => ()
                 }
             },
-            _ => (),
+            None => ()
         }
     }
 }
