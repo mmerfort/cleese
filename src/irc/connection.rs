@@ -1,7 +1,14 @@
 // For copyright information, see the LICENSE.md folder at the top of this
 // project's directory structure.
 
+//! # Connection
+//!
+//! This is where the actual connecting to the server happens. The biggest issue
+//! is making sure the connection is safe. The connection establishes a
+//! sender and receiver of events.
+
 use std::io::*;
+
 
 // Events will be handled by main irc handler.
 // Quit is needed as a special case to close down the program.
@@ -59,9 +66,7 @@ impl ServerConnection {
 // Primitive write from tcp buffer.
 pub fn write_line(stream: &mut LineBufferedWriter<TcpStream>, s: &str) {
     match stream.write_line(s) {
-        Err(e) => {
-            println!("Error: {}", e);
-        }
+        Err(e) => println!("Error: {}", e),
         _ => (),
     }
 }
@@ -69,9 +74,7 @@ pub fn write_line(stream: &mut LineBufferedWriter<TcpStream>, s: &str) {
 // Primitive read from tcp buffer.
 pub fn read_line(stream: &mut BufferedReader<TcpStream>) -> Option<String> {
     match stream.read_line() {
-        Ok(x) => {
-            Some(x)
-        },
+        Ok(x) => Some(x),
         Err(x) => {
             println!("error reading from stream: {}", x);
             None

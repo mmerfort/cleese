@@ -15,6 +15,7 @@
 use irc::privmsg::*;
 use util::*;
 
+
 /// Command through IRC.
 #[deriving(Show)]
 pub struct IrcCommand<'a> {
@@ -38,6 +39,7 @@ impl<'a> IrcCommand<'a> {
         }
     }
 }
+
 
 /// A command without a channel. Otherwise analogous to IrcCommand.
 #[deriving(Show)]
@@ -66,3 +68,4 @@ impl<'a> Command<'a> {
         }
     }
 }
+

@@ -1,6 +1,10 @@
 // For copyright information, see the LICENSE.md folder at the top of this
 // project's directory structure.
 
+//! # IRC Mod
+//!
+//! Reexport everything in the IRC module.
+
 #![macro_escape]
 
 // We can reexport what we want to show from this module.

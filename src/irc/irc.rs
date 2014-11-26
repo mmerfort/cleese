@@ -1,6 +1,10 @@
 // For copyright information, see the LICENSE.md folder at the top of this
 // project's directory structure.
 
+//! # IRC
+//!
+//! This is the meat of the project. The IRC object has a connection and data.
+
 #![macro_escape]
 
 use std::io::*;
@@ -42,8 +46,7 @@ impl<'a> Irc<'a> {
 
     // Register a callback for a specific command.
     pub fn register_cmd_cb(&mut self, cmd: &str,
-                           cb: |&IrcCommand, &IrcWriter, &BotInfo|:'a)
-    {
+                           cb: |&IrcCommand, &IrcWriter, &BotInfo|:'a) {
         let c = cmd.to_string();
         if !self.data.cmd_cb.contains_key(&c) {
             self.data.cmd_cb.insert(c.clone(), Vec::new());
@@ -53,7 +56,8 @@ impl<'a> Irc<'a> {
     }
 
     // Register a callback for a specific irc msg code.
-    pub fn register_code_cb(&mut self, code: &str, cb: |&IrcMsg, &IrcWriter, &BotInfo|:'a) {
+    pub fn register_code_cb(&mut self, code: &str,
+                            cb: |&IrcMsg, &IrcWriter, &BotInfo|:'a) {
         let c = code.to_string();
         if !self.data.code_cb.contains_key(&c) {
             self.data.code_cb.insert(c.clone(), Vec::new());
@@ -63,7 +67,8 @@ impl<'a> Irc<'a> {
     }
 
     // Register a callback for a PRIVMSG.
-    pub fn register_privmsg_cb(&mut self, cb: |&IrcPrivMsg, &IrcWriter, &BotInfo|:'a) {
+    pub fn register_privmsg_cb(&mut self,
+                               cb: |&IrcPrivMsg, &IrcWriter, &BotInfo|:'a) {
         self.data.privmsg_cb.push(cb);
     }
 

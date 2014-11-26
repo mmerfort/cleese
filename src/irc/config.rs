@@ -6,9 +6,11 @@
 //! Configuration is loaded from a json file. The only difference between
 //! JsonConfig and IrcConfig is that the IrcConfig doesn't own its strings.
 
+
 use regex::Regex;
 use serialize::{json, Decodable};
 use std::io::{File, Open, Read};
+
 
 /// This configuration matches up exactly with what you see in the config file.
 pub struct IrcConfig<'a> {
@@ -21,6 +23,7 @@ pub struct IrcConfig<'a> {
     pub out_blacklist: Vec<Regex>,
     pub cmd_prefix: &'a str,
 }
+
 
 /// Used only for decoding the .json file. The configuration ends up being used
 /// as an IrcConfig.
@@ -62,3 +65,4 @@ impl JsonConfig {
         };
     }
 }
+
