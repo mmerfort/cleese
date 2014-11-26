@@ -81,7 +81,7 @@ impl<'a> Irc<'a> {
             writer.output(format!("PONG {}", msg.param));
         });
 
-        // Key on 004, should be fine as it's usually in the beginning I believe?
+        // Key 004, should be fine as it's usually in the beginning I believe?
         self.register_code_cb("004", |_, writer: &IrcWriter, info: &BotInfo| {
             for chan in info.channels.iter() {
                 writer.join(*chan);

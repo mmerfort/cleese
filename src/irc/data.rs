@@ -68,7 +68,8 @@ impl <'a> IrcData<'a> {
     }
 
     /// Actually write something to irc.
-    pub fn handle_write(&self, s: &String, stream: &mut LineBufferedWriter<TcpStream>) {
+    pub fn handle_write(&self, s: &String,
+                        stream: &mut LineBufferedWriter<TcpStream>) {
         let s = s.as_slice();
         let mut blacklisted = false;
         for re in self.out_blacklist.iter() {
@@ -119,7 +120,9 @@ impl <'a> IrcData<'a> {
         let c = cmd.name.to_string();
 
         if c.as_slice() == "cmds" {
-            let mut cmds: Vec<&str> = self.cmd_cb.keys().map(|x| x.as_slice()).collect();
+            let mut cmds: Vec<&str> = self.cmd_cb.keys().map(|x| {
+                x.as_slice()
+            }).collect();
 
             // Manually add hardcoded commands.
             cmds.push_all(&["cmds"]);
