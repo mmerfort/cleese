@@ -3,10 +3,14 @@
 __Note: This CONTRIBUTING.md file adapted from the HTML5 Boilerplate project.__
 
 Love [Cleese](https://github.com/andrewbrinker/cleese) and want to get involved?
-Thanks! There are plenty of ways you can help!
+Thanks! With Cleese there are two main ways to contribute: working on the core
+functionality, or working on plugins. The process (described below) for these
+two things is the same, but working on the plugin system requires some
+knowledge of how plugins work in Cleese.
 
 Please take a moment to review this document in order to make the contribution
-process easy and effective for everyone involved.
+process easy and effective for everyone involved. If you're making or updating
+a plugin, pay special attention to the plugin documentation.
 
 Following these guidelines helps to communicate that you respect the time of
 the developers managing and developing this open source project. In return,
@@ -14,6 +18,65 @@ they should reciprocate that respect in addressing your issue or assessing
 patches and features.
 
 
+<a name="plugins"></a>
+## Writing Plugins
+
+Cleese's design is split into two parts, the core functionality (defined in
+`src/irc`) and the plugins (defined in `src/plugins`). The core functionality
+controls loading configuration info, connecting to a server, and processing
+input and output. The plugin system handles identifying and responding to
+commands and private messages. If you want to write a plugin you have to know
+how the plugin system works.
+
+All plugins implement the Plugin trait, which looks like this:
+
+```rust
+pub trait Plugin {
+   /// Respond to private messages.
+    fn privmsg(&mut self, msg: &IrcPrivMsg,
+             writer: &IrcWriter, info: &BotInfo) -> HandleResult;
+
+    /// Respond to commands.
+    fn cmd(&mut self, cmd: &IrcCommand,
+         writer: &IrcWriter, info: &BotInfo) -> HandleResult;
+
+    /// Provide help text.
+    fn help(&self) -> &'static str;
+
+    /// Provide plugin name.
+    fn name(&self) -> &'static str;
+}
+```
+
+This means that every plugin has to be able to respond to private messages and
+commands, and has to have a name and a short help message (which will both be
+shown with `/msg cleese help` in the chat).
+
+For private messgaes, the function takes in a message, a writer (used for
+output), and information about the bot, and it can either accept the input
+(which stops the input from being passed to the next plugin) or pass it.
+
+For commands, the function takes in a command, a writer (once again used for
+output), and information about the bot, and it once again can either accept or
+pass.
+
+Any new plugins should be added in their own file in `src/plugins`. The easiest
+way to start a new plugin is to copy an existing one (`src/plugins/default.rs`
+is recommended). However, writing the plugin isn't enough. It has to be
+registered.
+
+Plugins in Cleese are all added to a vector that is searched through on every
+input. This means that the order in which you register your plugins can
+effect the result of a given command (because two plugins might both accept the
+command, but only the first one in the registration order will see it). Plugins
+are registered in `src/plugins/mod.rs`.
+
+After you've registered your plugin, you'll want to compile it, test it, and
+most importantly write documentation for it. Once you've done that you're ready
+to make a pull request and have your plugin added to Cleese!
+
+
+<a name="issues"></a>
 ## Using the issue tracker
 
 The [issue tracker](https://github.com/andrewbrinker/cleese/issues) is

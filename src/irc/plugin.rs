@@ -4,8 +4,8 @@
 use irc::{IrcWriter, IrcCommand, BotInfo, IrcPrivMsg};
 
 pub enum HandleResult {
-	Accepted,
-	Passed
+    Accepted,
+    Passed
 }
 
 /// Trait defining all cleese plugins.
@@ -20,13 +20,13 @@ pub enum HandleResult {
 /// a struct implementing this trait, and then register it in
 /// `src/plugins/mod.rs`.
 pub trait Plugin {
-	/// Respond to private messages.
+    /// Respond to private messages.
     fn privmsg(&mut self, msg: &IrcPrivMsg,
-    	       writer: &IrcWriter, info: &BotInfo) -> HandleResult;
+               writer: &IrcWriter, info: &BotInfo) -> HandleResult;
 
     /// Respond to commands.
     fn cmd(&mut self, cmd: &IrcCommand,
-    	   writer: &IrcWriter, info: &BotInfo) -> HandleResult;
+           writer: &IrcWriter, info: &BotInfo) -> HandleResult;
 
     /// Provide help text.
     fn help(&self) -> &'static str;

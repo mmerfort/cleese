@@ -155,7 +155,8 @@ impl <'a> IrcData<'a> {
             println!("< {}", msg.orig);
         }
 
-        if msg.param.starts_with("cleese :help") {
+        // Get information about all known commands.
+        if msg.param.as_slice() == "cleese :help" {
             let start = msg.orig.find(':').unwrap();
             let end = msg.orig.find('!').unwrap();
             let user = msg.orig.slice(start + 1u, end);
