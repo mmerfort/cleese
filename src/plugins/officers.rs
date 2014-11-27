@@ -7,7 +7,7 @@
 //! programs.
 
 use std::fmt;
-use irc::{IrcPrivMsg, IrcWriter, IrcCommand, BotInfo, Plugin};
+use irc::{IrcPrivMsg, IrcWriter, IrcCommand, BotInfo, Plugin, HandleResult};
 
 /// Officer Position
 ///
@@ -157,7 +157,7 @@ impl Officers {
                 },
             ],
             description: "Get the list of CSE Club officers",
-            name: "Officers"
+            name: "officers"
         }
     }
 
@@ -183,18 +183,23 @@ impl Plugin for Officers {
     ///
     /// Called by the plugin subsystem when a private message is received. It
     /// currently does nothing.
-    fn privmsg(&mut self, _: &IrcPrivMsg, _: &IrcWriter, _: &BotInfo) {}
+    fn privmsg(&mut self, _: &IrcPrivMsg,
+               _: &IrcWriter, _: &BotInfo) -> HandleResult {
+        HandleResult::Passed
+    }
 
     /// Respond to received commands.
     ///
     /// Called by the plugin subsystem when a command is encountered. It only
     /// responds to the command "officers". Otherwise it does nothing.
-    fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, _info: &BotInfo) {
+    fn cmd(&mut self, cmd: &IrcCommand,
+           writer: &IrcWriter, _info: &BotInfo) -> HandleResult {
         match cmd.name {
             "officers" => {
                 writer.msg(cmd.channel.as_slice(), self.officers().as_slice());
+                HandleResult::Accepted
             }
-            _ => {}
+            _ => { HandleResult::Passed }
         }
     }
 

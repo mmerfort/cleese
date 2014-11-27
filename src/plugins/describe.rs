@@ -5,7 +5,7 @@
 //!
 //! This plugin just shares the bot description taken from the config file.
 
-use irc::{IrcPrivMsg, IrcWriter, IrcCommand, BotInfo, Plugin};
+use irc::{IrcPrivMsg, IrcWriter, IrcCommand, BotInfo, Plugin, HandleResult};
 
 
 /// This struct only has the minimum number of fields for a plugin.
@@ -20,7 +20,7 @@ impl Describe {
     pub fn new() -> Describe {
         Describe {
             description: "Describe the IRC bot",
-            name: "Describe"
+            name: "describe"
         }
     }
 }
@@ -30,19 +30,24 @@ impl Plugin for Describe {
     ///
     /// Called by the plugin subsystem when a private message is received. It
     /// currently does nothing.
-    fn privmsg(&mut self, _: &IrcPrivMsg, _: &IrcWriter, _: &BotInfo) {}
+    fn privmsg(&mut self, _: &IrcPrivMsg,
+               _: &IrcWriter, _: &BotInfo) -> HandleResult {
+        HandleResult::Passed
+    }
 
     /// Respond to received commands.
     ///
     /// Called by the plugin subsystem when a command is encountered. It only
     /// responds to the command "describe". Otherwise it does nothing.
-    fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, info: &BotInfo) {
+    fn cmd(&mut self, cmd: &IrcCommand,
+           writer: &IrcWriter, info: &BotInfo) -> HandleResult {
         match cmd.name {
             "describe" => {
                 let msg = format!("{}", info.descr);
                 writer.msg(cmd.channel.as_slice(), msg.as_slice());
+                HandleResult::Accepted
             }
-            _ => {}
+            _ => { HandleResult::Passed }
         }
     }
 

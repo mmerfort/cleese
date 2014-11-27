@@ -9,7 +9,7 @@
 
 extern crate time;
 
-use irc::{IrcPrivMsg, IrcWriter, IrcCommand, BotInfo, Plugin};
+use irc::{IrcPrivMsg, IrcWriter, IrcCommand, BotInfo, Plugin, HandleResult};
 use util;
 
 
@@ -27,8 +27,8 @@ impl Uptime {
     pub fn new() -> Uptime {
         Uptime {
             start: time::now(),
-            description: "Find out how long the bot has been alive.",
-            name: "Uptime"
+            description: "Find out how long the bot has been up.",
+            name: "uptime"
         }
     }
 
@@ -46,18 +46,23 @@ impl Plugin for Uptime {
     ///
     /// Called by the plugin subsystem when a private message is received. It
     /// currently does nothing.
-    fn privmsg(&mut self, _: &IrcPrivMsg, _: &IrcWriter, _: &BotInfo) {}
+    fn privmsg(&mut self, _: &IrcPrivMsg,
+               _: &IrcWriter, _: &BotInfo) -> HandleResult {
+        HandleResult::Passed
+    }
 
     /// Respond to received commands.
     ///
     /// Called by the plugin subsystem when a command is encountered. It only
     /// responds to the command "uptime". Otherwise it does nothing.
-    fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, _info: &BotInfo) {
+    fn cmd(&mut self, cmd: &IrcCommand,
+           writer: &IrcWriter, _info: &BotInfo) -> HandleResult {
         match cmd.name {
             "uptime" => {
                 writer.msg(cmd.channel.as_slice(), self.uptime().as_slice());
+                HandleResult::Accepted
             }
-            _ => {}
+            _ => { HandleResult::Passed }
         }
     }
 

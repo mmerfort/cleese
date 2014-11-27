@@ -8,7 +8,7 @@
 //! IRC chat.
 
 use std::rand;
-use irc::{IrcPrivMsg, IrcWriter, IrcCommand, BotInfo, Plugin};
+use irc::{IrcPrivMsg, IrcWriter, IrcCommand, BotInfo, Plugin, HandleResult};
 
 
 /// Contains a vector of excuses, defined in the constructor.
@@ -72,8 +72,8 @@ impl Excuse {
                 "I must have been stress testing our production server.",
                 "The request must have dropped some packets."
             ],
-            description: "Get a random excuse taken from developerexcuses.com",
-            name: "Excuse"
+            description: "Get an excuse from developerexcuses.com",
+            name: "excuse"
         }
     }
 
@@ -89,18 +89,23 @@ impl Plugin for Excuse {
     ///
     /// Called by the plugin subsystem when a private message is received. It
     /// currently does nothing.
-    fn privmsg(&mut self, _: &IrcPrivMsg, _: &IrcWriter, _: &BotInfo) {}
+    fn privmsg(&mut self, _: &IrcPrivMsg,
+               _: &IrcWriter, _: &BotInfo) -> HandleResult {
+        HandleResult::Passed
+    }
 
     /// Respond to received commands.
     ///
     /// Called by the plugin subsystem when a command is encountered. It only
     /// responds to the command "excuse". Otherwise it does nothing.
-    fn cmd(&mut self, cmd: &IrcCommand, writer: &IrcWriter, _info: &BotInfo) {
+    fn cmd(&mut self, cmd: &IrcCommand,
+           writer: &IrcWriter, _info: &BotInfo) -> HandleResult {
         match cmd.name {
             "excuse" => {
                 writer.msg(cmd.channel.as_slice(), self.excuse().as_slice());
+                HandleResult::Accepted
             },
-            _ => {}
+            _ => { HandleResult::Passed }
         }
     }
 

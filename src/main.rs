@@ -41,9 +41,10 @@
 #![unstable]
 
 #![allow(dead_code)]
-#![feature(globs)]
-#![feature(macro_rules)]
-#![feature(phase)]
+#![deny(missing_docs)]
+#![deny(warnings)]
+
+#![feature(globs, macro_rules, phase)]
 #[phase(plugin)]
 
 extern crate regex_macros;

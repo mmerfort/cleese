@@ -111,7 +111,10 @@ impl <'a> IrcData<'a> {
             (*cb)(msg, writer, &self.info);
         }
         for plugin in self.plugins.iter_mut() {
-            plugin.privmsg(msg, writer, &self.info);
+            match plugin.privmsg(msg, writer, &self.info) {
+                HandleResult::Accepted => break,
+                HandleResult::Passed => {}
+            }
         }
     }
 
@@ -137,7 +140,10 @@ impl <'a> IrcData<'a> {
             }
         }
         for plugin in self.plugins.iter_mut() {
-            plugin.cmd(cmd, writer, &self.info);
+            match plugin.cmd(cmd, writer, &self.info) {
+                HandleResult::Accepted => break,
+                HandleResult::Passed => {}
+            }
         }
     }
 
@@ -147,6 +153,16 @@ impl <'a> IrcData<'a> {
         let code = msg.code.clone();
         if !self.in_blacklist.contains(&code) {
             println!("< {}", msg.orig);
+        }
+
+        if msg.param.starts_with("cleese :help") {
+            let start = msg.orig.find(':').unwrap();
+            let end = msg.orig.find('!').unwrap();
+            let user = msg.orig.slice(start + 1u, end);
+            for p in self.plugins.iter() {
+                let reply = format!("`cleese {}`: {}", p.name(), p.help());
+                writer.msg(user, reply.as_slice());
+            }
         }
 
         // Irc msg callbacks.

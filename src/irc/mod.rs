@@ -16,7 +16,7 @@ pub use irc::writer::IrcWriter;
 pub use irc::info::BotInfo;
 pub use irc::command::{ IrcCommand, Command };
 pub use irc::irc::Irc;
-pub use irc::plugin::Plugin;
+pub use irc::plugin::{Plugin, HandleResult};
 pub use irc::config::JsonConfig;
 
 mod config;
