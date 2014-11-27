@@ -3,7 +3,7 @@
 
 use irc::{IrcWriter, IrcCommand, BotInfo, IrcPrivMsg};
 
-pub enum HandleResult {
+pub enum Handler {
     Accepted,
     Passed
 }
@@ -22,11 +22,11 @@ pub enum HandleResult {
 pub trait Plugin {
     /// Respond to private messages.
     fn privmsg(&mut self, msg: &IrcPrivMsg,
-               writer: &IrcWriter, info: &BotInfo) -> HandleResult;
+               writer: &IrcWriter, info: &BotInfo) -> Handler;
 
     /// Respond to commands.
     fn cmd(&mut self, cmd: &IrcCommand,
-           writer: &IrcWriter, info: &BotInfo) -> HandleResult;
+           writer: &IrcWriter, info: &BotInfo) -> Handler;
 
     /// Provide help text.
     fn help(&self) -> &'static str;

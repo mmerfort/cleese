@@ -112,8 +112,8 @@ impl <'a> IrcData<'a> {
         }
         for plugin in self.plugins.iter_mut() {
             match plugin.privmsg(msg, writer, &self.info) {
-                HandleResult::Accepted => break,
-                HandleResult::Passed => {}
+                Handler::Accepted => break,
+                Handler::Passed => {}
             }
         }
     }
@@ -141,8 +141,8 @@ impl <'a> IrcData<'a> {
         }
         for plugin in self.plugins.iter_mut() {
             match plugin.cmd(cmd, writer, &self.info) {
-                HandleResult::Accepted => break,
-                HandleResult::Passed => {}
+                Handler::Accepted => break,
+                Handler::Passed => {}
             }
         }
     }
